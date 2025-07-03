@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forex Lot Size Calculator (NGN)</title>
+    <meta name="description"
+        content="Professional Forex lot size calculator for Nigerian Naira accounts. Calculate optimal position sizes, pip values, and risk management." />
+    <meta name="author" content="Forex Calculator" />
+    <meta property="og:title" content="Forex Lot Size Calculator (NGN)" />
+    <meta property="og:description"
+        content="Professional Forex lot size calculator for Nigerian Naira accounts. Calculate optimal position sizes, pip values, and risk management." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="#" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@nairafxcalculator" />
+    <meta name="twitter:image" content="#" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <!-- Axios for API calls -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-dark p-4 text-foreground">
+    <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-primary mb-2 flex items-center justify-center gap-2">
+                <!-- Calculator icon -->
+                <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect x="5" y="3" width="14" height="18" rx="2" stroke-width="2" stroke="currentColor"
+                        fill="none" />
+                    <rect x="8" y="6" width="8" height="3" rx="1" stroke-width="2" stroke="currentColor" fill="none" />
+                    <circle cx="8.5" cy="13.5" r="1" fill="currentColor" />
+                    <circle cx="12" cy="13.5" r="1" fill="currentColor" />
+                    <circle cx="15.5" cy="13.5" r="1" fill="currentColor" />
+                    <circle cx="8.5" cy="17" r="1" fill="currentColor" />
+                    <circle cx="12" cy="17" r="1" fill="currentColor" />
+                    <circle cx="15.5" cy="17" r="1" fill="currentColor" />
+                </svg>
+                Forex Lot Size Calculator
+            </h1>
+            <p class="text-muted-foreground text-lg">Calculate optimal lot sizes for Nigerian Naira (₦) accounts</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Results -->
+            <div class="bg-card border border-border shadow-card rounded-lg">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold text-card-foreground">Calculation Results</h2>
+                    <div id="results" class="space-y-4 hidden">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="p-4 bg-secondary rounded-lg">
+                                <div class="text-sm text-muted-foreground">Recommended Lot Size</div>
+                                <div id="lot-size" class="text-2xl font-bold text-primary">0</div>
+                            </div>
+                            <div class="p-4 bg-secondary rounded-lg">
+                                <div class="text-sm text-muted-foreground">Pip Value</div>
+                                <div id="pip-value" class="text-2xl font-bold text-foreground">₦0</div>
+                            </div>
+                        </div>
+                        <hr class="border-border" />
+                        <div class="space-y-3">
+                            <div
+                                class="flex items-center justify-between p-3 bg-success/10 rounded-lg border border-success/20">
+                                <div class="flex items-center gap-2">
+                                    📈 <span class="text-sm font-medium">Potential Profit</span>
+                                </div>
+                                <span id="potential-profit" class="font-bold text-success">₦0</span>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+                                <div class="flex items-center gap-2">
+                                    📉 <span class="text-sm font-medium">Potential Loss</span>
+                                </div>
+                                <span id="potential-loss" class="font-bold text-destructive">₦0</span>
+                            </div>
+                            <div
+                                class="flex items-center justify-between p-3 bg-warning/10 rounded-lg border border-warning/20">
+                                <div class="flex items-center gap-2">
+                                    💵 <span class="text-sm font-medium">Risk Amount</span>
+                                </div>
+                                <span id="risk-amount-result" class="font-bold text-warning">₦0</span>
+                            </div>
+                        </div>
+                        <div id="error" class="text-sm text-destructive hidden"></div>
+                    </div>
+                    <div id="no-results" class="text-center py-12">
+                 
+                        <p class="text-muted-foreground">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-muted-foreground" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="5" y="3" width="14" height="18" rx="2" stroke-width="2" stroke="currentColor"
+                                fill="none" />
+                            <rect x="8" y="6" width="8" height="3" rx="1" stroke-width="2" stroke="currentColor"
+                                fill="none" />
+                            <circle cx="8.5" cy="13.5" r="1" fill="currentColor" />
+                            <circle cx="12" cy="13.5" r="1" fill="currentColor" />
+                            <circle cx="15.5" cy="13.5" r="1" fill="currentColor" />
+                            <circle cx="8.5" cy="17" r="1" fill="currentColor" />
+                            <circle cx="12" cy="17" r="1" fill="currentColor" />
+                            <circle cx="15.5" cy="17" r="1" fill="currentColor" />
+                        </svg>
+                        Fill in the trading parameters to calculate your optimal lot
+                            size</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Form -->
+            <div class="bg-card border border-border shadow-card rounded-lg">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold text-card-foreground flex items-center gap-2 mb-4">
+                        💵 Trading Parameters
+                    </h2>
+                    <form id="lot-size-form" class="space-y-4">
+                        
+                        <div class="space-y-2">
+                            <label for="pair" class="block text-sm font-medium">Trading Pair</label>
+                            <select id="pair" name="pair" class="w-full p-2 border rounded-md focus:ring ring-primary"
+                                required>
+                                <option value="" disabled selected>Select a trading pair</option>
+                                <option value="EURUSD">EUR/USD</option>
+                                <option value="USDJPY">USD/JPY</option>
+                                <option value="GBPUSD">GBP/USD</option>
+                                <option value="USDCHF">USD/CHF</option>
+                                <option value="AUDUSD">AUD/USD</option>
+                                <option value="USDCAD">USD/CAD</option>
+                                <option value="NZDUSD">NZD/USD</option>
+                                <option value="EURGBP">EUR/GBP</option>
+                                <option value="EURJPY">EUR/JPY</option>
+                                <option value="GBPJPY">GBP/JPY</option>
+                            </select>
+                            <p id="pair-error" class="text-sm text-destructive hidden"></p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="balance" class="block text-sm font-medium">Account Balance (₦)</label>
+                            <input id="balance" type="number" placeholder="Enter your account balance in Naira"
+                                class="w-full p-2 border rounded-md focus:ring ring-primary" required />
+                            <p id="balance-error" class="text-sm text-destructive hidden"></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label for="risk-amount" class="block text-sm font-medium">Risk Amount</label>
+                                <input id="risk-amount" type="number" placeholder="Enter % or ₦"
+                                    class="w-full p-2 border rounded-md focus:ring ring-primary" required />
+                                <p id="risk-amount-error" class="text-sm text-destructive hidden"></p>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="risk-type" class="block text-sm font-medium">Risk Type</label>
+                                <select id="risk-type" name="risk-type"
+                                    class="w-full p-2 border rounded-md focus:ring ring-primary">
+                                    <option value="percentage">Percentage (%)</option>
+                                    <option value="fixed">Fixed (₦)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="entry-price" class="block text-sm font-medium">Entry Price</label>
+                            <input id="entry-price" type="number" step="0.0001" placeholder="Enter entry price"
+                                class="w-full p-2 border rounded-md focus:ring ring-primary" required />
+                            <p id="entry-price-error" class="text-sm text-destructive hidden"></p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-2">
+                                <label for="stop-loss" class="block text-sm font-medium">Stop Loss</label>
+                                <input id="stop-loss" type="number" step="0.0001" placeholder="Enter stop loss"
+                                    class="w-full p-2 border rounded-md focus:ring ring-primary" required />
+                                <p id="stop-loss-error" class="text-sm text-destructive hidden"></p>
+                            </div>
+                            <div class="space-y-2">
+                                <label for="take-profit" class="block text-sm font-medium">Take Profit</label>
+                                <input id="take-profit" type="number" step="0.0001" placeholder="Enter take profit"
+                                    class="w-full p-2 border rounded-md focus:ring ring-primary">
+                                <p id="take-profit-error" class="text-sm text-destructive hidden"></p>
+                            </div>
+                        </div>
+
+                        <button type="button" id="reset-btn" class="w-full p-3 rounded-md">Reset</button>
+
+                        <button type="submit" id="calculate-btn"
+                            class="w-full p-3 bg-primary text-primary-foreground rounded-md shadow-glow hover:bg-primary/80">
+                            Calculate Lot Size
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-sm text-muted-foreground">
+                * This calculator provides estimates based on simplified calculations. Always consider market conditions
+                and consult with financial advisors.
+            </p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

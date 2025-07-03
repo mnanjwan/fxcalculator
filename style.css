@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #feff05;
+  background-color: #141414;
+}
+
+.ring-primary {
+  background-color: #0d0d0d;
+  font-size: 16px;
+  border: #262626 1px solid;
+}
+
+.bg-card {
+  border: 1px solid #262626;
+  background-color: #1a1a1a;
+}
+
+p {
+  margin: 0 0 1em;
+  color: #caca9c;
+}
+
+/* Inputs */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #feff05 !important;
+  border-color: #feff05 !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #caca9c !important;
+  opacity: 1; /* Ensures full color */
+}
+
+/* Select */
+/* Select dark background on focus */
+select:focus {
+  background-color: #18181b !important;
+  color: #fff !important;
+  border-color: #FFD600 !important;
+  box-shadow: 0 0 0 2px #FFD600 !important;
+  outline: none !important;
+}
+
+/* Option styling (works in Chromium browsers) */
+select option {
+  background: #18181b !important;
+  color: #fff !important;
+}
+
+select option:checked,
+select option:focus,
+select option:hover {
+  background: #FFD600 !important;
+  color: #18181b !important;
+}
+
+
+/* button */
+#calculate-btn {
+  background-color: #feff05;
+  color: #262626;
+  border: 1px solid #262626;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+#reset-btn {
+  box-shadow: 0 0 0 2px #feff05;
+  border: none;
+}
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+
+@layer base {
+  :root {
+    --background: 0 0% 5%;
+    --foreground: 60 100% 50%;
+    --card: 0 0% 8%;
+    --card-foreground: 60 100% 50%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 60 100% 50%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 60 100% 50%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 60 30% 70%;
+    --accent: 60 100% 50%;
+    --accent-foreground: 0 0% 5%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 100% 50%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 60 100% 50%;
+    --success: 120 100% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 35 100% 50%;
+    --warning-foreground: 0 0% 100%;
+    --gradient-primary: linear-gradient(135deg, hsl(60 100% 50%), hsl(45 100% 60%));
+    --gradient-dark: linear-gradient(135deg, hsl(0 0% 5%), hsl(0 0% 12%));
+    --shadow-glow: 0 0 20px hsl(60 100% 50% / 0.3);
+    --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.5);
+    --radius: 0.5rem;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --61ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  input,
+  select,
+  button {
+    @apply outline-none;
+  }
+}
