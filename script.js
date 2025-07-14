@@ -304,17 +304,23 @@ async function calculateLotSize(event) {
   // Calculate pip value with live exchange rate
   const quoteCurrency = selectedPair.quote;
   const usdNgnRate = await getExchangeRate("USD");
+  const lotSizeInQuote = 100000;
+  const pipSize = selectedPair.pipLocation === 4 ? 0.0001 : 0.01;
+  const pipValueInQuote = lotSizeInQuote * pipSize;
+
   let pipValuePerStandardLot;
 
   if (quoteCurrency === "USD") {
-    pipValuePerStandardLot = 10; // For pairs like EUR/USD
-  } else if (selectedPair.base === "USD") {
-    pipValuePerStandardLot = 10 / entryPrice; // For pairs like USD/JPY
+    pipValuePerStandardLot = 10;
   } else {
-    // For pairs like EUR/GBP, EUR/JPY, GBP/JPY
     const quoteToUSDRate = await getQuoteToUSDRate(quoteCurrency);
-    pipValuePerStandardLot = 10 * quoteToUSDRate; // Pip value in USD
+    if (quoteToUSDRate) {
+      pipValuePerStandardLot = (pipValueInQuote / entryPrice) * quoteToUSDRate;
+    } else {
+      pipValuePerStandardLot = (pipValueInQuote / entryPrice) * 1;
+    }
   }
+
 
   const pipValueNaira = pipValuePerStandardLot * usdNgnRate;
 
